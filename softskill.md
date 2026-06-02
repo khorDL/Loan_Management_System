@@ -17,3 +17,12 @@ Service = only contains business logic
 Repository = only talks to database
 Model = only describes data shape
 
+Optional forces you to consciously handle the case where nothing is found — instead of getting a NullPointerException at 2am in production.
+
+// ❌ Junior way - dangerous
+User user = userRepository.findByEmail(email); // could be null!
+System.out.println(user.getFullName());         // NullPointerException 💥
+
+// ✅ Senior way - safe
+Optional<User> userOpt = userRepository.findByEmail(email);
+User user = userOpt.orElseThrow(() -> new RuntimeException("User not found"));
